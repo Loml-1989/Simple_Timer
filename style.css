@@ -1,39 +1,123 @@
 body {
-    background-color: #1a1a1a;
-    color: #ffffff;
-    font-family: Georgia, 'Times New Roman', Times, serif;
+    margin: 0;
+    height: 100vh;
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
-    margin: 0;
+    background-color: #09050e;
+    background-image: 
+        radial-gradient(circle at 15% 40%, #6b21a8, transparent 45%),
+        radial-gradient(circle at 85% 30%, #9333ea, transparent 50%),
+        radial-gradient(circle at 50% 80%, #d8b4fe, transparent 50%);
+    background-size: 200% 200%;
+    animation: ambientBleed 24s ease-in-out infinite alternate;
+    font-family: 'Geist', system-ui, -apple-system, sans-serif;
+    color: #ffffff;
+    overflow: hidden;
+}
+
+body::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: 50;
+    pointer-events: none;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.035'/%3E%3C/svg%3E");
+}
+
+@keyframes ambientBleed {
+    0% { background-position: 0% 0%; }
+    100% { background-position: 100% 100%; }
+}
+
+@keyframes fluidWarp {
+    0%, 100% { border-radius: 48px; }
+    33% { border-radius: 56px 40px 60px 48px / 48px 56px 40px 60px; }
+    66% { border-radius: 40px 60px 48px 56px / 60px 48px 56px 40px; }
 }
 
 .timer {
-    text-align: center;
+    position: relative;
+    z-index: 10;
+    padding: 64px 80px;
+    background: rgba(255, 255, 255, 0.015);
+    backdrop-filter: blur(48px) saturate(180%);
+    -webkit-backdrop-filter: blur(48px) saturate(180%);
+    
+    border: 1px solid rgba(255, 255, 255, 0.04);
+    border-top: 1px solid rgba(255, 255, 255, 0.25);
+    border-left: 1px solid rgba(255, 255, 255, 0.12);
+    
+    box-shadow: 
+        0 40px 80px -20px rgba(5, 0, 15, 0.8),
+        inset 0 4px 24px -4px rgba(255, 255, 255, 0.15),
+        inset 0 -4px 16px rgba(0, 0, 0, 0.3);
+        
+    animation: fluidWarp 14s cubic-bezier(0.4, 0, 0.2, 1) infinite;
 }
 
 .display-time {
-    font-size: 5rem;
+    font-family: 'Geist Mono', ui-monospace, monospace;
+    font-size: 6.5rem;
+    font-weight: 300;
+    letter-spacing: -0.04em;
+    margin: 0 0 48px 0;
+    text-align: center;
     font-variant-numeric: tabular-nums;
-    margin: 0 0 30px 0;
+    color: rgba(255, 255, 255, 0.95);
+    text-shadow: 
+        0 8px 24px rgba(0, 0, 0, 0.4),
+        0 0 40px rgba(216, 180, 254, 0.15);
+}
+
+.controls {
+    display: flex;
+    gap: 16px;
+    justify-content: center;
 }
 
 button {
-    font-size: 1.2rem;
-    padding: 12px 24px;
-    margin: 0 8px;
-    border: none;
-    border-radius: 6px;
+    font-family: 'Geist', system-ui, sans-serif;
+    font-size: 0.95rem;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: 16px 36px;
+    border-radius: 999px;
     cursor: pointer;
-    font-weight: bold;
-    transition: ease-in 0.2s;
+    background: rgba(255, 255, 255, 0.02);
+    backdrop-filter: blur(24px);
+    -webkit-backdrop-filter: blur(24px);
+    
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-top: 1px solid rgba(255, 255, 255, 0.2);
+    
+    transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+    box-shadow: 
+        0 8px 24px -8px rgba(0, 0, 0, 0.4),
+        inset 0 1px 1px rgba(255, 255, 255, 0.1);
 }
+
+.start { color: #e9d5ff; }
+.stop { color: #fecdd3; } 
+.reset { color: #d4d4d8; }
 
 button:hover {
-    opacity: 0.8;
+    transform: translateY(-2px);
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.1);
+    border-top: 1px solid rgba(255, 255, 255, 0.3);
+    box-shadow: 
+        0 16px 32px -8px rgba(0, 0, 0, 0.5),
+        0 0 24px rgba(216, 180, 254, 0.1),
+        inset 0 1px 2px rgba(255, 255, 255, 0.15);
 }
 
-.start { background-color: #4CAF50; color: white; }
-.stop { background-color: #f44336; color: white; }
-.reset { background-color: #555555; color: white; }
+button:active {
+    transform: translateY(1px) scale(0.96);
+    transition: all 0.1s cubic-bezier(0.4, 0, 0.2, 1);
+    background: rgba(255, 255, 255, 0.01);
+    box-shadow: 
+        0 2px 8px rgba(0, 0, 0, 0.3),
+        inset 0 4px 12px rgba(0, 0, 0, 0.3);
+    border-top-color: rgba(255, 255, 255, 0.05);
+}
